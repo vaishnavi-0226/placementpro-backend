@@ -5,17 +5,23 @@ const Job = require('../models/Job');
 const User = require('../models/User');
 const Application = require('../models/Application');
 
-// 1️⃣ Get eligible jobs
+// 1️⃣ Get eligible jobs (CGPA + Skills based)
 router.get('/feed', auth, async (req, res) => {
   try {
     const student = await User.findById(req.user.id);
 
+    if (!student) {
+      return res.status(404).json({ error: "Student not found" });
+    }
+
     const jobs = await Job.find({
       minCgpa: { $lte: student.cgpa },
-      isApproved: true
+      isApproved: true,
+      skills: { $in: student.skills }  // 🔥 Skill matching
     });
 
     res.json(jobs);
+
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -41,6 +47,7 @@ router.post('/apply/:jobId', auth, async (req, res) => {
     await application.save();
 
     res.json({ message: 'Applied successfully' });
+
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -54,6 +61,7 @@ router.get('/my-applications', auth, async (req, res) => {
     }).populate('job');
 
     res.json(apps);
+
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -72,6 +80,7 @@ router.get('/filter', auth, async (req, res) => {
     const jobs = await Job.find(query);
 
     res.json(jobs);
+
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
