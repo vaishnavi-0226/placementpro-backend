@@ -5,22 +5,31 @@ require('dotenv').config();
 
 const app = express();
 
+// =======================
 // Middleware
-app.use(cors());           // allows frontend to connect to backend
-app.use(express.json());   // allows reading JSON data from requests
+// =======================
+app.use(cors());            // allow frontend to connect
+app.use(express.json());    // read JSON body
 
+// =======================
 // Routes
-// any request to /api/auth will go to routes/auth.js
+// =======================
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/profile', require('./routes/profile'));
 app.use('/api/resume', require('./routes/resume'));
+app.use('/api/jobs', require('./routes/jobs'));   // ✅ VERY IMPORTANT (your route)
 
-// Connect to MongoDB then start server
+// =======================
+// Connect to MongoDB & Start Server
+// =======================
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
-    console.log('MongoDB Connected');
-    app.listen(process.env.PORT, () =>
-      console.log(`Server running on port ${process.env.PORT}`)
-    );
+    console.log('✅ MongoDB Connected');
+    app.listen(process.env.PORT, () => {
+      console.log(`✅ Server running on port ${process.env.PORT}`);
+    });
   })
-  .catch(err => console.error(err));
+  .catch(err => console.error('❌ DB Error:', err));
+  app.get('/test', (req, res) => {
+  res.send('Working');
+});
