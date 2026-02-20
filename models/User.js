@@ -6,23 +6,42 @@ const UserSchema = new mongoose.Schema({
   email:    { type: String, required: true, unique: true },
   password: { type: String, required: true },
 
-  // Profile fields (student fills these later)
-  phone:          { type: String, default: '' },
-  linkedin:       { type: String, default: '' },
-  github:         { type: String, default: '' },
-  cgpa:           { type: Number, default: 0 },
+  // ✅ ADD THIS ROLE FIELD
+  role: {
+    type: String,
+    enum: ['student', 'admin'],
+    default: 'student'
+  },
+
+  // Profile fields
+  phone:     { type: String, default: '' },
+  linkedin:  { type: String, default: '' },
+  github:    { type: String, default: '' },
+  address:   { type: String, default: '' },
+
+  // Academic Details
+  cgpa:      { type: Number, default: 0 },
+  backlogs:  { type: Number, default: 0 },
+  passingYear: { type: Number },
+
+  education: {
+    degree:  String,
+    branch:  String,
+    college: String,
+    year:    Number
+  },
+
+  // Skills & Experience
   skills:         [String],
   projects:       [{ title: String, description: String, techStack: String }],
   achievements:   [String],
   internships:    [{ company: String, role: String, duration: String }],
   workExperience: { type: Boolean, default: false },
-  education:      { degree: String, branch: String, college: String, year: Number },
-  address:        { type: String, default: '' },
 
-  // Used for forgot password feature
+  // Forgot password
   resetToken:       { type: String },
   resetTokenExpiry: { type: Date }
 
-}, { timestamps: true }); // auto adds createdAt, updatedAt
+}, { timestamps: true });
 
 module.exports = mongoose.model('User', UserSchema);

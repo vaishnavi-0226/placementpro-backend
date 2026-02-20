@@ -85,5 +85,36 @@ router.get('/filter', auth, async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+// 5️⃣ Admin update application status
+router.put('/applications/:id/status', auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user || user.role !== 'admin') {
+      return res.status(403).json({ msg: 'Access denied. Admin only.' });
+    }
+
+    const { status } = req.body;
+
+    const validStatuses = ['Applied', 'Aptitude', 'Technical', 'HR', 'Selected', 'Rejected'];
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({ msg: 'Invalid status' });
+    }
+
+    const application = await Application.findByIdAndUpdate(
+      req.params.id,
+      { status },
+      { new: true }
+    );
+
+    if (!application) {
+      return res.status(404).json({ msg: 'Application not found' });
+    }
+
+    res.json({ message: '✅ Status updated', application });
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 module.exports = router;
