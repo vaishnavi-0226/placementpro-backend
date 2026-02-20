@@ -1,0 +1,23 @@
+{
+  "name": "placementpro-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vaishnavi-0226/placementpro-backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/vaishnavi-0226/placementpro-backend/issues"
+  },
+  "homepage": "https://github.com/vaishnavi-0226/placementpro-backend#readme"
+}
