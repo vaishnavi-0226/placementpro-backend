@@ -9,7 +9,7 @@ const UserSchema = new mongoose.Schema({
   // ✅ ADD THIS ROLE FIELD
   role: {
     type: String,
-    enum: ['student', 'admin'],
+    enum: ['student', 'admin','alumni'],
     default: 'student'
   },
 
